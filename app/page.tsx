@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { ShoppingBag, Search, User, Heart, ChevronLeft, ChevronRight, Calendar, Menu, X } from 'lucide-react'
 
 const banners = [
@@ -32,6 +32,14 @@ export default function Home() {
   const categoriasRef = useRef<HTMLDivElement>(null)
   const produtosRef = useRef<HTMLDivElement>(null)
 
+  // Autoplay do banner
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBannerAtual((prev) => (prev + 1) % banners.length)
+    }, 4000)
+    return () => clearInterval(interval)
+  }, [])
+
   const proximoBanner = () => setBannerAtual((prev) => (prev + 1) % banners.length)
   const bannerAnterior = () => setBannerAtual((prev) => (prev - 1 + banners.length) % banners.length)
   const toggleCurtido = (id: number) => setCurtidos((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])
@@ -57,18 +65,12 @@ export default function Home() {
       {/* HEADER */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 lg:px-6 py-3 lg:py-4 flex items-center justify-between">
-
-          {/* MENU MOBILE */}
           <button className="lg:hidden" onClick={() => setMenuAberto(true)}>
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-
-          {/* LOGO */}
           <div className="flex items-center">
-            <img src="/logo.png" alt="Ótica Moderna" style={{ height: 60, width: 'auto' }} className="lg:h-20" />
+            <img src="/logo.png" alt="Ótica Moderna" style={{ height: 60, width: 'auto' }} />
           </div>
-
-          {/* NAV DESKTOP */}
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link, i) => (
               <a key={link} href="#" className={`text-xs font-bold tracking-widest hover:text-[#C41A1A] transition-colors ${i === 0 ? 'text-[#C41A1A]' : 'text-gray-800'}`}>
@@ -76,8 +78,6 @@ export default function Home() {
               </a>
             ))}
           </nav>
-
-          {/* ÍCONES */}
           <div className="flex items-center gap-3 lg:gap-5">
             <Search className="w-5 h-5 text-gray-700 cursor-pointer hover:text-[#C41A1A] transition-colors" />
             <User className="hidden lg:block w-5 h-5 text-gray-700 cursor-pointer hover:text-[#C41A1A] transition-colors" />
@@ -142,13 +142,15 @@ export default function Home() {
           </button>
         </div>
 
-        <button onClick={bannerAnterior} style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'rgba(255,255,255,0.8)', border: 'none', padding: 8, cursor: 'pointer' }}>
-          <ChevronLeft className="w-4 h-4 lg:w-5 lg:h-5" />
+        {/* Setas apenas no desktop */}
+        <button onClick={bannerAnterior} className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 p-2 hover:bg-[#C41A1A] hover:text-white transition-colors">
+          <ChevronLeft className="w-5 h-5" />
         </button>
-        <button onClick={proximoBanner} style={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', zIndex: 10, background: 'rgba(255,255,255,0.8)', border: 'none', padding: 8, cursor: 'pointer' }}>
-          <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5" />
+        <button onClick={proximoBanner} className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 p-2 hover:bg-[#C41A1A] hover:text-white transition-colors">
+          <ChevronRight className="w-5 h-5" />
         </button>
 
+        {/* Dots */}
         <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 8, zIndex: 10 }}>
           {banners.map((_, i) => (
             <button key={i} onClick={() => setBannerAtual(i)} style={{ width: 24, height: 2, background: i === bannerAtual ? '#C41A1A' : '#aaaaaa', border: 'none', cursor: 'pointer', padding: 0 }} />
@@ -162,7 +164,7 @@ export default function Home() {
           <h3 className="text-lg font-black tracking-widest mb-5 lg:hidden">COLEÇÕES</h3>
         </div>
 
-        {/* DESKTOP: grid */}
+        {/* DESKTOP */}
         <div className="hidden lg:grid max-w-7xl mx-auto px-6 grid-cols-3 gap-4">
           {categorias.map((cat) => (
             <div key={cat.id} className="relative h-80 cursor-pointer overflow-hidden group" style={{ background: cat.bg }}>
@@ -178,7 +180,7 @@ export default function Home() {
 
         {/* MOBILE: carrossel */}
         <div className="relative lg:hidden">
-          <div ref={categoriasRef} className="flex gap-4 overflow-x-auto scrollbar-hide px-4 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
+          <div ref={categoriasRef} className="flex gap-4 overflow-x-auto px-4 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
             {categorias.map((cat) => (
               <div key={cat.id} className="relative flex-shrink-0 w-72 h-64 cursor-pointer overflow-hidden snap-start rounded-lg" style={{ background: cat.bg }}>
                 <div className="absolute inset-0" style={{ backgroundImage: `url(${cat.img})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
@@ -206,7 +208,7 @@ export default function Home() {
             <p className="text-gray-500 mt-2 text-sm tracking-wide">Conheça os modelos mais amados</p>
           </div>
 
-          {/* DESKTOP: grid */}
+          {/* DESKTOP */}
           <div className="hidden lg:grid grid-cols-4 gap-6">
             {produtos.map((produto) => (
               <div key={produto.id} className="bg-white group cursor-pointer">
