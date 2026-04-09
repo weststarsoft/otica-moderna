@@ -23,7 +23,13 @@ const produtos = [
   { id: 4, nome: 'SUNSET NOIR - DS', preco: 'R$ 540,00', novo: true, img: '/produto-04.jpg' },
 ]
 
-const navLinks = ['NOVIDADES', 'ÓCULOS DE SOL', 'ÓCULOS DE GRAU', 'PROMOÇÕES', 'LENTES DE GRAU']
+const navLinks = [
+  { label: 'NOVIDADES', href: '/' },
+  { label: 'ÓCULOS DE SOL', href: '/oculos-de-sol' },
+  { label: 'ÓCULOS DE GRAU', href: '/oculos-de-grau' },
+  { label: 'PROMOÇÕES', href: '/promocoes' },
+  { label: 'LENTES DE GRAU', href: '/lentes-de-grau' },
+]
 
 export default function Home() {
   const router = useRouter()
@@ -69,13 +75,18 @@ export default function Home() {
           <button className="lg:hidden" onClick={() => setMenuAberto(true)}>
             <Menu className="w-6 h-6 text-gray-700" />
           </button>
-          <div className="flex items-center">
+          <div className="flex items-center cursor-pointer" onClick={() => router.push('/')}>
             <img src="/logo.png" alt="Ótica Moderna" style={{ height: 60, width: 'auto' }} />
           </div>
           <nav className="hidden lg:flex items-center gap-8">
             {navLinks.map((link, i) => (
-              <a key={link} href="#" className={`text-xs font-bold tracking-widest hover:text-[#C41A1A] transition-colors ${i === 0 ? 'text-[#C41A1A]' : 'text-gray-800'}`}>
-                {link}
+              <a
+                key={link.label}
+                href={link.href}
+                onClick={(e) => { e.preventDefault(); router.push(link.href) }}
+                className={`text-xs font-bold tracking-widest hover:text-[#C41A1A] transition-colors ${i === 0 ? 'text-[#C41A1A]' : 'text-gray-800'}`}
+              >
+                {link.label}
               </a>
             ))}
           </nav>
@@ -105,8 +116,8 @@ export default function Home() {
           </button>
           <nav className="flex flex-col gap-6 text-2xl font-semibold">
             {navLinks.map((item) => (
-              <a key={item} href="#" className="text-white hover:text-[#C41A1A] transition-colors" onClick={() => setMenuAberto(false)}>
-                {item}
+              <a key={item.label} href={item.href} className="text-white hover:text-[#C41A1A] transition-colors" onClick={() => { setMenuAberto(false); router.push(item.href) }}>
+                {item.label}
               </a>
             ))}
           </nav>
