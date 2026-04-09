@@ -16,10 +16,10 @@ const categorias = [
 ]
 
 const produtos = [
-  { id: 1, nome: 'WAYFARER CLASSIC', preco: 'R$ 450,00', novo: true },
-  { id: 2, nome: 'AVIATOR SLIM', preco: 'R$ 520,00', novo: true },
-  { id: 3, nome: 'OVAL ELEGANCE', preco: 'R$ 390,00', novo: false },
-  { id: 4, nome: 'RETRO SQUARE', preco: 'R$ 480,00', novo: true },
+  { id: 1, nome: 'WAYFARER CLASSIC', preco: 'R$ 450,00', novo: true, img: '/produto-01.jpg' },
+  { id: 2, nome: 'AVIATOR SLIM', preco: 'R$ 520,00', novo: true, img: '/produto-02.jpg' },
+  { id: 3, nome: 'OVAL ELEGANCE', preco: 'R$ 390,00', novo: false, img: '/produto-03.jpg' },
+  { id: 4, nome: 'RETRO SQUARE', preco: 'R$ 480,00', novo: true, img: '/produto-04.jpg' },
 ]
 
 const navLinks = ['NOVIDADES', 'ÓCULOS DE SOL', 'ÓCULOS DE GRAU', 'PROMOÇÕES', 'LENTES DE GRAU']
@@ -213,9 +213,9 @@ export default function Home() {
             {produtos.map((produto) => (
               <div key={produto.id} className="bg-white group cursor-pointer">
                 <div className="relative h-56 bg-[#f0f0f0] flex items-center justify-center overflow-hidden">
-                  {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest">NOVO</span>}
-                  <span className="text-6xl opacity-40 group-hover:scale-110 transition-transform duration-300">🕶️</span>
-                  <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3">
+                  {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest z-10">NOVO</span>}
+                  <img src={produto.img} alt={produto.nome} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3 z-10">
                     <Heart className={`w-5 h-5 transition-colors ${curtidos.includes(produto.id) ? 'fill-[#C41A1A] text-[#C41A1A]' : 'text-gray-400 hover:text-[#C41A1A]'}`} />
                   </button>
                 </div>
@@ -235,10 +235,10 @@ export default function Home() {
             <div ref={produtosRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
               {produtos.map((produto) => (
                 <div key={produto.id} className="bg-white flex-shrink-0 w-52 snap-start cursor-pointer">
-                  <div className="relative h-44 bg-[#f0f0f0] flex items-center justify-center overflow-hidden">
-                    {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest">NOVO</span>}
-                    <span className="text-5xl opacity-40">🕶️</span>
-                    <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3">
+                  <div className="relative h-44 bg-[#f0f0f0] overflow-hidden">
+                    {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest z-10">NOVO</span>}
+                    <img src={produto.img} alt={produto.nome} className="w-full h-full object-cover" />
+                    <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3 z-10">
                       <Heart className={`w-4 h-4 transition-colors ${curtidos.includes(produto.id) ? 'fill-[#C41A1A] text-[#C41A1A]' : 'text-gray-400'}`} />
                     </button>
                   </div>
