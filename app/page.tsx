@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 import { ShoppingBag, Search, User, Heart, ChevronLeft, ChevronRight, Calendar, Menu, X } from 'lucide-react'
 
 const banners = [
@@ -16,15 +17,16 @@ const categorias = [
 ]
 
 const produtos = [
-  { id: 1, nome: 'Vortex X - Ettore', preco: 'R$ 520,00', novo: true, img: '/produto-01.jpg' },
-  { id: 2, nome: 'Monaco Gold - DS', preco: 'R$ 480,00', novo: true, img: '/produto-02.jpg' },
-  { id: 3, nome: 'Aether Frame - CS', preco: 'R$ 590,00', novo: false, img: '/produto-03.jpg' },
-  { id: 4, nome: 'Sunset Noir - DS', preco: 'R$ 540,00', novo: true, img: '/produto-04.jpg' },
+  { id: 1, nome: 'VORTEX X - ETTORE', preco: 'R$ 520,00', novo: true, img: '/produto-01.jpg' },
+  { id: 2, nome: 'MONACO GOLD - DS', preco: 'R$ 480,00', novo: true, img: '/produto-02.jpg' },
+  { id: 3, nome: 'AETHER FRAME - CS', preco: 'R$ 590,00', novo: false, img: '/produto-03.jpg' },
+  { id: 4, nome: 'SUNSET NOIR - DS', preco: 'R$ 540,00', novo: true, img: '/produto-04.jpg' },
 ]
 
 const navLinks = ['NOVIDADES', 'ÓCULOS DE SOL', 'ÓCULOS DE GRAU', 'PROMOÇÕES', 'LENTES DE GRAU']
 
 export default function Home() {
+  const router = useRouter()
   const [bannerAtual, setBannerAtual] = useState(0)
   const [curtidos, setCurtidos] = useState<number[]>([])
   const [carrinho, setCarrinho] = useState<number[]>([])
@@ -32,7 +34,6 @@ export default function Home() {
   const categoriasRef = useRef<HTMLDivElement>(null)
   const produtosRef = useRef<HTMLDivElement>(null)
 
-  // Autoplay do banner
   useEffect(() => {
     const interval = setInterval(() => {
       setBannerAtual((prev) => (prev + 1) % banners.length)
@@ -96,7 +97,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* MENU MOBILE OVERLAY */}
+      {/* MENU MOBILE */}
       {menuAberto && (
         <div className="fixed inset-0 z-50 bg-black bg-opacity-95 flex flex-col p-6 lg:hidden">
           <button onClick={() => setMenuAberto(false)} className="self-end mb-8">
@@ -142,7 +143,6 @@ export default function Home() {
           </button>
         </div>
 
-        {/* Setas apenas no desktop */}
         <button onClick={bannerAnterior} className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white bg-opacity-80 p-2 hover:bg-[#C41A1A] hover:text-white transition-colors">
           <ChevronLeft className="w-5 h-5" />
         </button>
@@ -150,7 +150,6 @@ export default function Home() {
           <ChevronRight className="w-5 h-5" />
         </button>
 
-        {/* Dots */}
         <div style={{ position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)', display: 'flex', gap: 8, zIndex: 10 }}>
           {banners.map((_, i) => (
             <button key={i} onClick={() => setBannerAtual(i)} style={{ width: 24, height: 2, background: i === bannerAtual ? '#C41A1A' : '#aaaaaa', border: 'none', cursor: 'pointer', padding: 0 }} />
@@ -178,7 +177,7 @@ export default function Home() {
           ))}
         </div>
 
-        {/* MOBILE: carrossel */}
+        {/* MOBILE carrossel */}
         <div className="relative lg:hidden">
           <div ref={categoriasRef} className="flex gap-4 overflow-x-auto px-4 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
             {categorias.map((cat) => (
@@ -211,18 +210,18 @@ export default function Home() {
           {/* DESKTOP */}
           <div className="hidden lg:grid grid-cols-4 gap-6">
             {produtos.map((produto) => (
-              <div key={produto.id} className="bg-white group cursor-pointer">
-                <div className="relative h-56 bg-[#f0f0f0] flex items-center justify-center overflow-hidden">
+              <div key={produto.id} onClick={() => router.push(`/produto/${produto.id}`)} className="bg-white group cursor-pointer">
+                <div className="relative h-56 bg-[#f0f0f0] overflow-hidden">
                   {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest z-10">NOVO</span>}
                   <img src={produto.img} alt={produto.nome} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                  <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3 z-10">
+                  <button onClick={(e) => { e.stopPropagation(); toggleCurtido(produto.id) }} className="absolute top-3 right-3 z-10">
                     <Heart className={`w-5 h-5 transition-colors ${curtidos.includes(produto.id) ? 'fill-[#C41A1A] text-[#C41A1A]' : 'text-gray-400 hover:text-[#C41A1A]'}`} />
                   </button>
                 </div>
                 <div className="p-4">
                   <p className="font-black text-sm tracking-widest text-black">{produto.nome}</p>
                   <p className="text-gray-500 text-sm mt-1">{produto.preco}</p>
-                  <button onClick={() => adicionarCarrinho(produto.id)} className="mt-3 w-full border border-black text-black text-xs font-bold tracking-widest py-2 hover:bg-black hover:text-white transition-colors">
+                  <button onClick={(e) => { e.stopPropagation(); adicionarCarrinho(produto.id) }} className="mt-3 w-full border border-black text-black text-xs font-bold tracking-widest py-2 hover:bg-black hover:text-white transition-colors">
                     {carrinho.includes(produto.id) ? '✓ ADICIONADO' : 'COMPRAR'}
                   </button>
                 </div>
@@ -230,22 +229,22 @@ export default function Home() {
             ))}
           </div>
 
-          {/* MOBILE: carrossel */}
+          {/* MOBILE carrossel */}
           <div className="relative lg:hidden">
             <div ref={produtosRef} className="flex gap-4 overflow-x-auto snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>
               {produtos.map((produto) => (
-                <div key={produto.id} className="bg-white flex-shrink-0 w-52 snap-start cursor-pointer">
+                <div key={produto.id} onClick={() => router.push(`/produto/${produto.id}`)} className="bg-white flex-shrink-0 w-52 snap-start cursor-pointer">
                   <div className="relative h-44 bg-[#f0f0f0] overflow-hidden">
                     {produto.novo && <span className="absolute top-3 left-3 bg-[#C41A1A] text-white text-[10px] font-bold px-2 py-1 tracking-widest z-10">NOVO</span>}
                     <img src={produto.img} alt={produto.nome} className="w-full h-full object-cover" />
-                    <button onClick={() => toggleCurtido(produto.id)} className="absolute top-3 right-3 z-10">
+                    <button onClick={(e) => { e.stopPropagation(); toggleCurtido(produto.id) }} className="absolute top-3 right-3 z-10">
                       <Heart className={`w-4 h-4 transition-colors ${curtidos.includes(produto.id) ? 'fill-[#C41A1A] text-[#C41A1A]' : 'text-gray-400'}`} />
                     </button>
                   </div>
                   <div className="p-3">
                     <p className="font-black text-xs tracking-widest text-black">{produto.nome}</p>
                     <p className="text-gray-500 text-xs mt-1">{produto.preco}</p>
-                    <button onClick={() => adicionarCarrinho(produto.id)} className="mt-2 w-full border border-black text-black text-[10px] font-bold tracking-widest py-2 hover:bg-black hover:text-white transition-colors">
+                    <button onClick={(e) => { e.stopPropagation(); adicionarCarrinho(produto.id) }} className="mt-2 w-full border border-black text-black text-[10px] font-bold tracking-widest py-2 hover:bg-black hover:text-white transition-colors">
                       {carrinho.includes(produto.id) ? '✓ ADICIONADO' : 'COMPRAR'}
                     </button>
                   </div>
