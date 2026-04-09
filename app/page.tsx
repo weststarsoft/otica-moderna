@@ -16,10 +16,10 @@ const categorias = [
 ]
 
 const produtos = [
-  { id: 1, nome: 'WAYFARER CLASSIC', preco: 'R$ 450,00', novo: true, img: '/produto-01.jpg' },
-  { id: 2, nome: 'AVIATOR SLIM', preco: 'R$ 520,00', novo: true, img: '/produto-02.jpg' },
-  { id: 3, nome: 'OVAL ELEGANCE', preco: 'R$ 390,00', novo: false, img: '/produto-03.jpg' },
-  { id: 4, nome: 'RETRO SQUARE', preco: 'R$ 480,00', novo: true, img: '/produto-04.jpg' },
+  { id: 1, nome: 'Vortex X - Ettore', preco: 'R$ 520,00', novo: true, img: '/produto-01.jpg' },
+  { id: 2, nome: 'Monaco Gold - DS', preco: 'R$ 480,00', novo: true, img: '/produto-02.jpg' },
+  { id: 3, nome: 'Aether Frame - CS', preco: 'R$ 590,00', novo: false, img: '/produto-03.jpg' },
+  { id: 4, nome: 'Sunset Noir - DS', preco: 'R$ 540,00', novo: true, img: '/produto-04.jpg' },
 ]
 
 const navLinks = ['NOVIDADES', 'ÓCULOS DE SOL', 'ÓCULOS DE GRAU', 'PROMOÇÕES', 'LENTES DE GRAU']
